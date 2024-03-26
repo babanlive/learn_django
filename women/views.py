@@ -4,7 +4,10 @@ from django.urls import reverse
 
 
 def index(request):
-    return HttpResponse("Страница приложения women.")
+    return render(request, 'women/index.html')
+
+def about(request):
+    return render(request, 'women/about.html')
 
 def categories(request, cat_id):
     return HttpResponse(f"<h1>Статьи по категориям</h1> <p>id: {cat_id}</p>")
@@ -24,3 +27,4 @@ def archive(request, year):
 
 def page_not_found(request, exception):
     return HttpResponseNotFound("<h1>Страница не найдена</h1>")
+
