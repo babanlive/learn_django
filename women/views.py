@@ -5,23 +5,18 @@ from django.urls import reverse
 
 menu = ["О сайте", "Добавить статью", "Обратная связь", "Войти"]
 
+data_db = [
+    {'id': 1, 'title': 'Анджелина Джоли', 'content': 'Биография Анджелины Джоли', 'is_published': True},
+    {'id': 2, 'title': 'Марго Робби', 'content': 'Биография Марго Робби', 'is_published': False},
+    {'id': 3, 'title': 'Джулия Робертс', 'content': 'Биография Джулия Робертс', 'is_published': True},
+]
 
-class MyClass:
-    def __init__(self, a, b):
-        self.a = a
-        self.b = b
 
-
-def index(request): # HttpRequest
-
+def index(request):
     data = {
         'title': 'Главная страница',
         'menu': menu,
-        'float': 28.56,
-        'lst': [1, 2, 'abc', True],
-        'set': {1, 2, 3, 2, 5},
-        'dict': {'key_1': 'value_1', 'key_2': 'value_2'},
-        'obj': MyClass(10, 20),
+        'posts': data_db,
     }
     return render(request, 'women/index.html', context=data)
 
