@@ -2,7 +2,9 @@ from django.http import (
     HttpResponse,
     HttpResponseNotFound,
 )
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
+
+from .models import Women
 
 menu = [
     {"title": "О сайте", "url_name": "about"},
@@ -45,10 +47,12 @@ cats_db = [
 
 
 def index(request):
+    posts = Women.objects.filter(is_published=1)
+
     data = {
         "title": "Главная страница",
         "menu": menu,
-        "posts": data_db,
+        "posts": posts,
         "cat_selected": 0,
     }
     return render(request, "women/index.html", context=data)
@@ -58,8 +62,17 @@ def about(request):
     return render(request, "women/about.html", {"title": "О сайте", "menu": menu})
 
 
-def show_post(request, post_id):
-    return HttpResponse(f"Отображение статьи с id = {post_id}")
+def show_post(request, post_slug):
+    post = get_object_or_404(Women, slug=post_slug)
+
+    data = {
+        "title": post.title,
+        "menu": menu,
+        "post": post,
+        "cat_selected": 1,
+    }
+
+    return render(request, "women/post.html", data)
 
 
 def addpage(request):
@@ -76,7 +89,7 @@ def login(request):
 
 def show_category(request, cat_id):
     data = {
-        "title": "Отображение по рубоикам",
+        "title": "Отображение по рубрикам",
         "menu": menu,
         "posts": data_db,
         "cat_selected": cat_id,
