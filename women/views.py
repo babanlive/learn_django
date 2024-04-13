@@ -4,7 +4,7 @@ from django.http import (
 )
 from django.shortcuts import get_object_or_404, render
 
-from .models import Women
+from .models import Women, Category
 
 menu = [
     {"title": "О сайте", "url_name": "about"},
@@ -17,12 +17,8 @@ data_db = [
     {
         "id": 1,
         "title": "Анджелина Джоли",
-        "content": """<h1>Анджелина Джоли</h1> (англ. Angelina Jolie[7],
-        при рождении Войт (англ. Voight), ранее Джоли Питт (англ. Jolie Pitt);
-        род. 4 июня 1975, Лос-Анджелес, Калифорния, США) — американская актриса кино,
-        телевидения и озвучивания, кинорежиссёр, сценаристка, продюсер, фотомодель, посол доброй воли ООН.
-        Обладательница премии «Оскар», трёх премий «Золотой глобус» (первая актриса в истории, три года подряд
-        выигравшая премию) и двух «Премий Гильдии киноактёров США».""",
+        "content": """<h1>Анджелина Джоли</h1> (англ. Angelina Jolie[7], при рождении Войт (англ. Voight), ранее Джоли Питт (англ. Jolie Pitt); род. 4 июня 1975, Лос-Анджелес, Калифорния, США) — американская актриса кино, телевидения и озвучивания, кинорежиссёр, сценаристка, продюсер, фотомодель, посол доброй воли ООН.
+    Обладательница премии «Оскар», трёх премий «Золотой глобус» (первая актриса в истории, три года подряд выигравшая премию) и двух «Премий Гильдии киноактёров США».""",
         "is_published": True,
     },
     {
@@ -39,15 +35,9 @@ data_db = [
     },
 ]
 
-cats_db = [
-    {"id": 1, "name": "Актрисы"},
-    {"id": 2, "name": "Певицы"},
-    {"id": 3, "name": "Спортсменки"},
-]
-
 
 def index(request):
-    posts = Women.objects.filter(is_published=1)
+    posts = Women.published.all()
 
     data = {
         "title": "Главная страница",
@@ -62,17 +52,29 @@ def about(request):
     return render(request, "women/about.html", {"title": "О сайте", "menu": menu})
 
 
+def show_category(request, cat_slug):
+    category = get_object_or_404(Category, slug=cat_slug)
+    posts = Women.published.filter(cat_id=category.pk)
+
+    data = {
+        'title': f'Рубрика: {category.name}',
+        'menu': menu,
+        'posts': posts,
+        'cat_selected': category.pk,
+    }
+    return render(request, 'women/index.html', context=data)
+
 def show_post(request, post_slug):
     post = get_object_or_404(Women, slug=post_slug)
 
     data = {
-        "title": post.title,
-        "menu": menu,
-        "post": post,
-        "cat_selected": 1,
+        'title': post.title,
+        'menu': menu,
+        'post': post,
+        'cat_selected': 1,
     }
 
-    return render(request, "women/post.html", data)
+    return render(request, 'women/post.html', data)
 
 
 def addpage(request):
@@ -87,12 +89,15 @@ def login(request):
     return HttpResponse("Авторизация")
 
 
-def show_category(request, cat_id):
+def show_category(request, cat_slug):
+    category = get_object_or_404(Category, slug=cat_slug)
+    posts = Women.published.filter(cat_id=category.pk)
+
     data = {
-        "title": "Отображение по рубрикам",
+        "title": f"Рубрика: {category.name}",
         "menu": menu,
-        "posts": data_db,
-        "cat_selected": cat_id,
+        "posts": posts,
+        "cat_selected": category.pk,
     }
     return render(request, "women/index.html", context=data)
 
