@@ -19,6 +19,7 @@ class Women(models.Model):
     time_update = models.DateTimeField(auto_now=True)
     is_published = models.BooleanField(choices=Status.choices, default=Status.DRAFT)
     cat = models.ForeignKey("Category", on_delete=models.PROTECT)
+    tags = models.ManyToManyField("TagPost", blank=True, related_name="tagss")
 
     objects = models.Manager()
     published = PublishedManager()
@@ -31,7 +32,7 @@ class Women(models.Model):
         return reverse("post", kwargs={"post_slug": self.slug})
 
     def __repr__(self):
-        return f"Name = {self.name}, ID = {self.id}"
+        return f"Name = {self.title}, ID = {self.id}"
 
 
 class Category(models.Model):
@@ -43,3 +44,11 @@ class Category(models.Model):
 
     def __repr__(self):
         return f"Name = {self.name}, ID = {self.id}"
+
+
+class TagPost(models.Model):
+    tag = models.CharField(max_length=100, db_index=True)
+    slug = models.SlugField(max_length=255, unique=True, db_index=True)
+
+    def __repr__(self) -> str:
+        return f"{self.tag}"
