@@ -20,6 +20,9 @@ class Women(models.Model):
     is_published = models.BooleanField(choices=Status.choices, default=Status.DRAFT)
     cat = models.ForeignKey("Category", on_delete=models.PROTECT)
     tags = models.ManyToManyField("TagPost", blank=True, related_name="tagss")
+    husband = models.OneToOneField(
+        "Husband", on_delete=models.SET_NULL, null=True, related_name="woman"
+    )
 
     objects = models.Manager()
     published = PublishedManager()
@@ -55,3 +58,11 @@ class TagPost(models.Model):
 
     def __repr__(self) -> str:
         return f"{self.tag}"
+
+
+class Husband(models.Model):
+    name = models.CharField(max_length=100)
+    age = models.IntegerField(null=True)
+
+    def __repr__(self) -> str:
+        return f"{self.name}"
