@@ -70,7 +70,7 @@ def show_tag_postlist(request, tag_slug):
 
 
 def addpage(request):
-    return HttpResponse("Добавление статьи")
+    return render(request, 'women/addpage.html', {'menu': menu, 'title': 'Добавление статьи'})
 
 
 def contact(request):
