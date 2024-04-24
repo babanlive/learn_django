@@ -1,10 +1,11 @@
+import uuid
 from django.http import (
     HttpResponse,
     HttpResponseNotFound,
 )
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import AddPostForm
+from .forms import AddPostForm, UploadFileForm
 
 from .models import Category, TagPost, Women
 
@@ -28,8 +29,26 @@ def index(request):
     return render(request, "women/index.html", context=data)
 
 
+def handle_uploaded_file(f):
+    ext_name = uuid.uuid4().hex
+    first_name, exstension = f.name.rsplit(".", 1)
+    with open(f"uploads/{first_name}_{ext_name}.{exstension}", "wb+") as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+
+
 def about(request):
-    return render(request, "women/about.html", {"title": "О сайте", "menu": menu})
+    if request.method == "POST":
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            handle_uploaded_file(request.FILES["file"])
+            return redirect("about")
+    else:
+        form = UploadFileForm()
+
+    return render(
+        request, "women/about.html", {"title": "О сайте", "menu": menu, "form": form}
+    )
 
 
 def show_category(request, cat_slug):

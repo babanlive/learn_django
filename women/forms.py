@@ -23,3 +23,8 @@ class AddPostForm(forms.ModelForm):
             raise ValidationError("Длина превышает 50 символов")
 
         return title
+
+
+class UploadFileForm(forms.Form):
+    file = forms.FileField(label="Выберите файл")
+    
