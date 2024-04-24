@@ -79,7 +79,7 @@ class TagPost(models.Model):
     def get_absolute_url(self):
         return reverse("tag", kwargs={"tag_slug": self.slug})
 
-    def __repr__(self) -> str:
+    def __str__(self) -> str:
         return self.tag
 
 
