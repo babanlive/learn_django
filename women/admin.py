@@ -1,5 +1,6 @@
 from typing import Any
 from django.contrib import admin, messages
+from django.utils.safestring import mark_safe
 
 from .models import Category, Women
 
@@ -23,21 +24,25 @@ class MarriedFilter(admin.SimpleListFilter):
 
 @admin.register(Women)
 class WomenAdmin(admin.ModelAdmin):
-    fields = ("title", "slug", "content", "cat", "husband")
+    fields = ("title", "slug", "post_photo", "content", "cat", "husband")
     prepopulated_fields = {"slug": ("title",)}
     filter_horizontal = ("tags",)
-    list_display = ("title", "time_create", "is_published", "cat", "brief_info")
+    list_display = ("title", "post_photo","time_create", "is_published", "cat")
     list_display_links = ("title",)
+    readonly_fields = ["post_photo"]
     ordering = ["-time_create"]
     list_editable = ("is_published",)
     list_per_page = 5
     actions = ("set_published", "set_draft")
     search_fields = ("title", "cat__ name")
     list_filter = (MarriedFilter, "cat__name", "is_published")
+    save_on_top = True
 
-    @admin.display(description="краткое описание")
-    def brief_info(self, women: Women):
-        return f"{len(women.content)} символов"
+    @admin.display(description="Изображение", ordering="content")
+    def post_photo(self, women: Women):
+        if women.photo:
+            return mark_safe(f"<img src='{women.photo.url}' width=50>")
+        return "Без фото"
 
     @admin.action(description="Опубликовать")
     def set_published(self, request, queryset):
