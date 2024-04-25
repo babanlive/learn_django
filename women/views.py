@@ -1,4 +1,3 @@
-import uuid
 from django.http import (
     HttpResponse,
     HttpResponseNotFound,
@@ -29,20 +28,25 @@ def index(request):
     return render(request, "women/index.html", context=data)
 
 
-def handle_uploaded_file(f):
-    ext_name = uuid.uuid4().hex
-    first_name, exstension = f.name.rsplit(".", 1)
-    with open(f"uploads/{first_name}_{ext_name}.{exstension}", "wb+") as destination:
-        for chunk in f.chunks():
-            destination.write(chunk)
+def addpage(request):
+    if request.method == "POST":
+        form = AddPostForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect("home")
+    else:
+        form = AddPostForm()
+
+    data = {"menu": menu, "title": "Добавление статьи", "form": form}
+    return render(request, "women/addpage.html", data)
 
 
 def about(request):
     if request.method == "POST":
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            handle_uploaded_file(request.FILES["file"])
-            return redirect("about")
+            fl = UploadFileForm(file=form.cleaned_data["file"])
+            fl.save()
     else:
         form = UploadFileForm()
 
@@ -88,25 +92,6 @@ def show_tag_postlist(request, tag_slug):
         "cat_selected": None,
     }
     return render(request, "women/index.html", context=data)
-
-
-def addpage(request):
-    if request.method == "POST":
-        form = AddPostForm(request.POST)
-        if form.is_valid():
-            # print(form.cleaned_data)
-            # try:
-            #     Women.objects.create(**form.cleaned_data)
-            #     return redirect('home')
-            # except:
-            #     form.add_error(None, "Ошибка добавления поста")
-            form.save()
-            return redirect("home")
-    else:
-        form = AddPostForm()
-
-    data = {"menu": menu, "title": "Добавление статьи", "form": form}
-    return render(request, "women/addpage.html", data)
 
 
 def contact(request):
