@@ -4,7 +4,8 @@ from django.http import (
     HttpResponseNotFound,
 )
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.generic import DetailView, ListView, View
+from django.urls import reverse_lazy
+from django.views.generic import DetailView, ListView, View, FormView
 
 from .forms import AddPostForm, UploadFileForm
 
@@ -27,20 +28,17 @@ class WomenHome(ListView):
         return Women.published.all().select_related("cat")
 
 
-class AddPage(View):
-    def get(self, request):
-        form = AddPostForm()
-        data = {"menu": menu, "title": "Добавление статьи", "form": form}
-        return render(request, "women/addpage.html", data)
+class AddPage(FormView):
+    form_class = AddPostForm
+    template_name = "women/addpage.html"
+    success_url = reverse_lazy("home")
+    extra_context = {"title": "Добавление статьи", "menu": menu}
 
-    def post(self, request):
-        form = AddPostForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect("home")
-        data = {"menu": menu, "title": "Добавление статьи", "form": form}
-        return render(request, "women/addpage.html", data)
-
+    def form_valid(self, form):
+        print(form.cleaned_data)
+        form.save()
+        return super().form_valid(form)
+    
 
 def about(request):
     if request.method == "POST":
