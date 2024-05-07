@@ -24,7 +24,7 @@ class MarriedFilter(admin.SimpleListFilter):
 
 @admin.register(Women)
 class WomenAdmin(admin.ModelAdmin):
-    fields = ("title", "slug", "post_photo", "content", "cat", "husband")
+    fields = ("title", "slug", "photo", "post_photo", "content", "cat", "husband")
     prepopulated_fields = {"slug": ("title",)}
     filter_horizontal = ("tags",)
     list_display = ("title", "post_photo","time_create", "is_published", "cat")
