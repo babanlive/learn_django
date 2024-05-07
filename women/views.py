@@ -23,6 +23,10 @@ class WomenHome(DataMixin, ListView):
 
     def get_queryset(self):
         return Women.published.all().select_related("cat")
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context)
 
 
 def about(request):
