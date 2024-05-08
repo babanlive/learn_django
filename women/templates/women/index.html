@@ -4,7 +4,8 @@
 <ul class="list-articles">
 	{% for p in posts %}
 			<li><div class="article-panel">
-	<p class="first">Категория: {{p.cat.name}}</p>
+	<p class="first">Категория: {{p.cat.name}} | автор:
+	{{ p.author.username|default:"неизвестен" }}</p>
 	<p class="last">Дата: {{p.time_update|date:"d-m-Y H:i:s"}}</p>
     </div>
 {% if p.photo %}
@@ -33,17 +34,15 @@
 		</li>
 		{% endif %}
 
-        {% for p in page_range %}
-		{% if page_obj.number == p or p == paginator.ELLIPSIS %}
-		<li class="page-num page-num-selected">
-			{{ p }}
-		</li>
-		{% else %}
-		<li class="page-num">
-			<a href="?page={{ p }}">{{ p }}</a>
-		</li>
+        {% for p in paginator.page_range %}
+		{% if page_obj.number == p %}
+		<li class="page-num page-num-selected">{{ p }}</li>
+		{% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+        <li class="page-num">
+            <a href="?page={{ p }}">{{ p }}</a>
+        </li>
 		{% endif %}
-		{% endfor %}
+        {% endfor %}
 
 		{% if page_obj.has_next %}
 		<li class="page-num">
