@@ -21,9 +21,9 @@
 1. Установите Python 3.11 (или более новую версию) и Django 4.2.1.
 2. Клонируйте репозиторий и перейдите в папку проекта:
 
-git clone https://github.com/your-username/learn_django.git cd learn_django
+git clone https://github.com/your-username/learn_django.git && cd learn_django
 
-git clone https://github.com/your-username/learn_django.git cd learn_django
+3. Создайте и активируйте виртуальное окружение:
 
 python3 -m venv venv source venv/bin/activate
 
