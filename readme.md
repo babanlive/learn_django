@@ -21,28 +21,28 @@
 1. Установите Python 3.11 (или более новую версию) и Django 4.2.1.
 2. Клонируйте репозиторий и перейдите в папку проекта:
 
-git clone git@github.com:babanlive/learn_django.git && cd learn_django
+`git clone git@github.com:babanlive/learn_django.git && cd learn_django`
 
 3. Создайте и активируйте виртуальное окружение:
 
-python3 -m venv venv 
-source venv/bin/activate
+`python3 -m venv venv` 
+`source venv/bin/activate`
 
 4. Установите зависимости из файла `requirements.txt`:
 
-pip install -r requirements.txt
+`pip install -r requirements.txt`
 
 5. Примените миграции:
 
-python manage.py migrate
+`python manage.py migrate`
 
 6. Создайте суперпользователя (для доступа к административной панели):
 
-python manage.py createsuperuser
+`python manage.py createsuperuser`
 
 7. Запустите сервер разработки:
 
-python manage.py runserver
+`python manage.py runserver`
 
 8. Откройте браузер и перейдите по адресу `http://localhost:8000/`.
 
