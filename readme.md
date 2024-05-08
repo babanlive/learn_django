@@ -1,57 +1,55 @@
-# site about great women
+# Проект Django "learn_django"
 
-A brief description of your project.
+Данный проект представляет собой учебный проект, созданный с целью изучения фреймворка Django.
 
-## Table of Contents
+## Описание проекта
 
-- [About](#about)
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+Проект представляет из себя блог о великих женщинах мира.
 
-## About
+В данном проекте реализованы основные функции, которые могут быть найдены в большинстве веб-приложений, таких как регистрация, вход в систему, создание, изменение и просмотр статей.
 
-A detailed description of your project, its purpose, and its goals.
+## Технологии и инструменты
 
-## Features
+- Django 4.2.1
+- Python 3.11
+- SQLite
+- HTML/CSS
+- Bootstrap
 
-- Feature 1: Description of feature 1.
-- Feature 2: Description of feature 2.
-- Feature 3: Description of feature 3.
+## Установка и запуск проекта
 
-## Installation
+1. Установите Python 3.11 (или более новую версию) и Django 4.2.1.
+2. Клонируйте репозиторий и перейдите в папку проекта:
 
-1. Clone the repository:
-git clone https://github.com/your-username/your-project.git
+git clone https://github.com/your-username/learn_django.git cd learn_django
 
-2. Install the required dependencies:
+git clone https://github.com/your-username/learn_django.git cd learn_django
+
+python3 -m venv venv source venv/bin/activate
+
+4. Установите зависимости из файла `requirements.txt`:
 
 pip install -r requirements.txt
 
+5. Примените миграции:
 
-3. Set up the necessary environment variables.
+python manage.py migrate
 
-## Usage
+6. Создайте суперпользователя (для доступа к административной панели):
 
-1. Run the application:
+python manage.py createsuperuser
 
-python app.py
+7. Запустите сервер разработки:
 
+python manage.py runserver
 
-2. Access the application in your web browser at `http://localhost:5000`.
+8. Откройте браузер и перейдите по адресу `http://localhost:8000/`.
 
-## Contributing
+## Использование
 
-Contributions are welcome! Here's how you can contribute:
+- Регистрация и вход в систему
+- Создание и просмотр пользовательских статей
 
-1. Fork the repository.
-2. Create a new branch: `git checkout -b feature/your-feature`.
-3. Make your changes and commit them: `git commit -m 'Add your feature'`.
-4. Push to the branch: `git push origin feature/your-feature`.
-5. Submit a pull request.
+## Лицензия
 
-## License
-
-This project is licensed under the [MIT License](LICENSE).
+Этот проект лицензирован под лицензией MIT.
