@@ -29,6 +29,11 @@
 
 `pip install -r requirements.txt`
 
+4. Создание файла .env:
+   
+   - Создайте файл .env в папке с settings.py.
+   - Укажите в файле .env все необходимые переменные окружения.
+
 4. Примените миграции:
 
 `python manage.py migrate`
