@@ -1,29 +1,21 @@
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.paginator import Paginator
 from django.http import (
     HttpResponse,
     HttpResponseNotFound,
-    Http404,
-    HttpResponseRedirect,
-    HttpResponsePermanentRedirect,
 )
-from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse, reverse_lazy
-from django.template.loader import render_to_string
-from django.template.defaultfilters import slugify
-from django.views import View
+from django.shortcuts import render, get_object_or_404
+from django.urls import reverse_lazy
 from django.views.generic import (
-    TemplateView,
     ListView,
     DetailView,
-    FormView,
     CreateView,
     UpdateView,
 )
 
-from .forms import AddPostForm, UploadFileForm
-from .models import Women, Category, TagPost, UploadFiles
+from .forms import AddPostForm
+from .models import Women, TagPost
 from .utils import DataMixin
 
 
@@ -63,10 +55,11 @@ class ShowPost(DataMixin, DetailView):
         return get_object_or_404(Women.published, slug=self.kwargs[self.slug_url_kwarg])
 
 
-class AddPage(LoginRequiredMixin, DataMixin, CreateView):
+class AddPage(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, CreateView):
     form_class = AddPostForm
     template_name = "women/addpage.html"
     title_page = "Добавление статьи"
+    permission_required = ("women.add_women",)
 
     def form_valid(self, form):
         w = form.save(commit=False)
@@ -74,14 +67,15 @@ class AddPage(LoginRequiredMixin, DataMixin, CreateView):
         return super().form_valid(form)
 
 
-class UpdatePage(DataMixin, UpdateView):
+class UpdatePage(PermissionRequiredMixin, DataMixin, UpdateView):
     model = Women
     fields = ["title", "content", "photo", "is_published", "cat"]
     template_name = "women/addpage.html"
     success_url = reverse_lazy("home")
     title_page = "Редактирование статьи"
+    permission_required = ("women.change_women",)
 
-
+@permission_required(perm="women.add_women", raise_exception=True)
 def contact(request):
     return HttpResponse("Обратная связь")
 
