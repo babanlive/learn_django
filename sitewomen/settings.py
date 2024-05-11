@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_extensions",
     "women.apps.WomenConfig",
-    "users",
+    "users.apps.UsersConfig",
     "debug_toolbar",
 ]
 

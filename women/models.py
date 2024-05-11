@@ -65,13 +65,7 @@ class Women(models.Model):
         null=True,
         default=None,
     )
-    user = models.OneToOneField("User", on_delete=models.CASCADE)
-    photo = models.ImageField(
-        upload_to="users/%Y/%m/", blank=True, default="users/default.jpg", verbose_name="Изображение"
-    )
-    date_birth = models.DateTimeField(blank=True, null=True, verbose_name="Дата рождения")
 
-    
     objects = models.Manager()
     published = PublishedManager()
 
