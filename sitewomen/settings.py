@@ -27,15 +27,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 
 
-SECRET_KEY = (
-    env("SECRET_KEY")
-    or "django-insecure-ywt^i-jce1cq%5q4s^p0130-h9x9vdmvmge-vf8g+htkga+=71"
-)
+SECRET_KEY = (env("SECRET_KEY", default="YOUR_SECRET_KEY"))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG", default=False)
 
-ALLOWED_HOSTS = ["127.0.0.1"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 INTERNAL_IPS = ["127.0.0.1"]
 
 
@@ -94,9 +91,13 @@ WSGI_APPLICATION = "sitewomen.wsgi.application"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': env("ENGINE_DB", default="django.db.backends.postgresql"),
+        'NAME': env("NAME_DB", default="postgres"),
+        'USER': env("USER_DB", default="postgres"),
+        'PASSWORD': env("PASSWORD_DB", default="postgres"),
+        'HOST': env("HOST_DB", default="localhost"),
+        'PORT': env("PORT_DB", default="5432"),
     }
 }
 
