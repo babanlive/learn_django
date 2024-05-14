@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.cache import cache
 from django.core.paginator import Paginator
 from django.http import (
     HttpResponse,
@@ -27,7 +28,12 @@ class WomenHome(DataMixin, ListView):
     cat_selected = 0
 
     def get_queryset(self):
-        return Women.published.all().select_related("cat")
+        w_lst = cache.get('women_posts')
+        if not w_lst:
+            w_lst = Women.published.all().select_related('cat')
+            cache.set('women_posts', w_lst, 120)
+
+        return w_lst
 
 
 @login_required
@@ -54,6 +60,7 @@ class ShowPost(DataMixin, DetailView):
 
     def get_object(self, queryset=None):
         return get_object_or_404(Women.published, slug=self.kwargs[self.slug_url_kwarg])
+    
 
 
 class AddPage(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, CreateView):
