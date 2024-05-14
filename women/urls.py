@@ -4,6 +4,8 @@ from . import views
 from . import converters
 
 
+register_converter(converters.FourDigitYearConverter, "year4")
+
 urlpatterns = [
     path("", views.WomenHome.as_view(), name="home"),
     path("about/", views.about, name="about"),
