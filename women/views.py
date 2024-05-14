@@ -12,9 +12,10 @@ from django.views.generic import (
     DetailView,
     CreateView,
     UpdateView,
+    FormView
 )
 
-from .forms import AddPostForm
+from .forms import AddPostForm, ContactForm
 from .models import Women, TagPost
 from .utils import DataMixin
 
@@ -75,9 +76,16 @@ class UpdatePage(PermissionRequiredMixin, DataMixin, UpdateView):
     title_page = "Редактирование статьи"
     permission_required = ("women.change_women",)
 
-@permission_required(perm="women.add_women", raise_exception=True)
-def contact(request):
-    return HttpResponse("Обратная связь")
+
+class ContactFormView(LoginRequiredMixin, DataMixin, FormView):
+    form_class = ContactForm
+    template_name = 'women/contact.html'
+    success_url = reverse_lazy('home')
+    title_page = "Обратная связь"
+
+    def form_valid(self, form):
+        print(form.cleaned_data)
+        return super().form_valid(form)
 
 
 def login(request):
@@ -122,3 +130,4 @@ class TagPostList(DataMixin, ListView):
         return Women.published.filter(
             tags__slug=self.kwargs["tag_slug"]
         ).select_related("cat")
+        
