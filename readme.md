@@ -22,7 +22,7 @@
 
 1. Клонируйте репозиторий и перейдите в папку проекта:
 
-`git clone git@github.com:babanlive/learn_django.git && cd learn_django`
+`git@github.com:babanlive/sitewomen.git && cd sitewomen`
 
 2. Создайте и активируйте виртуальное окружение:
 
