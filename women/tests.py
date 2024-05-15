@@ -23,4 +23,3 @@ class GetPagesTestCase(TestCase):
 
     def tearDown(self):
         "Действия после выполнения каждого теста"
- 

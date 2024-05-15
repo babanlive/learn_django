@@ -54,7 +54,6 @@ tzdata = "2023.3"
 urllib3 = "2.2.1"
 wcwidth = "0.2.13"
 
-
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
