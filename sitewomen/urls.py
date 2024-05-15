@@ -8,7 +8,6 @@ from sitewomen import settings
 from women.sitemaps import CategorySitemap, PostSitemap
 from women.views import page_not_found
 
-
 sitemaps = {
     'posts': PostSitemap,
     'cats': CategorySitemap,
