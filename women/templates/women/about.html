@@ -1,19 +1,34 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>{{title}}</h1>
-{% for item in page_obj %}
-<p>{{ item.pk }}: {{ item.title }}</p>
-{% endfor %}
+    <h1>{{ title }}</h1>
+    {% for item in page_obj %}
+        <p>{{ item.pk }}: {{ item.title }}</p>
+    {% endfor %}
 
-<nav>
-    <ul>
-        {% for p in page_obj.paginator.page_range %}
-        <li>
-            <a href="?page={{ p }}">{{ p }}</a>
-        </li>
-        {% endfor %}
-    </ul>
-</nav>
-
+    {% if page_obj.has_other_pages %}
+    <nav>
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li>
+                    <a href="?page=1">&laquo;</a>
+                </li>
+            {% endif %}
+            {% for p in page_obj.paginator.page_range %}
+                {% if page_obj.number == p %}
+                <li class="active">{{ p }}</li>
+                {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+                <li>
+                    <a href="?page={{ p }}">{{ p }}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+            {% if page_obj.has_next %}
+                <li>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">&raquo;</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
 {% endblock %}
