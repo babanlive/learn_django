@@ -38,7 +38,7 @@ class GetPagesTestCase(TestCase):
         response = self.client.get(path)
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(len(response.context_data['posts']), 5)
-        self.assertQuerysetEqual(response.context_data['posts'], post_list[:5])
+        self.assertQuerySetEqual(response.context_data['posts'], post_list[:5])
 
     def test_paginated_mainpage(self):
         path = reverse('home')
@@ -49,7 +49,7 @@ class GetPagesTestCase(TestCase):
         second_page_posts = post_lst[(paginate * (page - 1)) : (paginate * page)]
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(len(response.context_data['posts']), 5)
-        self.assertQuerysetEqual(response.context_data['posts'], second_page_posts)
+        self.assertQuerySetEqual(response.context_data['posts'], second_page_posts)
 
     def test_show_post(self):
         post = Women.published.get(pk=3)
