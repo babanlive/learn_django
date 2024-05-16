@@ -61,8 +61,8 @@ class AddPage(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, CreateView
     permission_required = ('women.add_women',)
 
     def form_valid(self, form):
-        w = form.save(commit=False)
-        w.author = self.request.user
+        woman = form.save(commit=False)
+        woman.author = self.request.user
         return super().form_valid(form)
 
 
