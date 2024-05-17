@@ -1,5 +1,7 @@
 from http import HTTPStatus
 
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Permission, User
 from django.test import TestCase
 from django.urls import reverse
 
@@ -60,3 +62,59 @@ class GetPagesTestCase(TestCase):
 
     def tearDown(self):
         "Действия после выполнения каждого теста"
+
+
+class AddPageTestCase(TestCase):
+    fixtures = [
+        'women_women.json',
+        'women_category.json',
+        'women_husband.json',
+        'women_tagpost.json',
+    ]
+
+    def setUp(self):
+        """
+        Инициализация перед выполнением каждого теста
+        """
+        model = get_user_model()
+        self.user = model.objects.create_user(username='testuser', password='12345')
+        self.user.user_permissions.add(Permission.objects.get(codename='add_women'))
+
+    def test_add_page_access_for_authenticated_user(self):
+        """
+        Проверка доступности страницы добавления статьи для авторизованного пользователя
+        """
+        self.client.force_login(self.user)
+        path = reverse('add_page')
+        response = self.client.get(path)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertTemplateUsed(response, 'women/addpage.html')
+        self.assertEqual(response.context['title'], 'Добавление статьи')
+
+    def test_add_page_form_submission(self):
+        """
+        Проверка корректного создания новой статьи после заполнения формы
+        """
+        self.client.force_login(self.user)
+        path = reverse('add_page')
+        form_data = {
+            'title': 'Test Title',
+            'content': 'Test Content',
+            'slug': 'test-title',
+            'cat': '1',
+        }
+        response = self.client.post(path, form_data)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertTrue(Women.objects.filter(title='Test Title').exists())
+        new_post = Women.objects.get(title='Test Title')
+        self.assertEqual(new_post.content, 'Test Content')
+
+    def test_add_page_redirect_for_unauthenticated_user(self):
+        """
+        Проверка перенаправления на страницу входа для неавторизованного пользователя при попытке доступа к странице добавления статьи
+        """
+        path = reverse('add_page')
+        redirect_uri = reverse('users:login') + '?next=' + path
+        response = self.client.get(path)
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        self.assertRedirects(response, redirect_uri)
